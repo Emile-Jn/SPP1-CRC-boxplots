@@ -68,125 +68,6 @@ insert_skipline <- function(name) {
     }
 }
 
-boxplotss <- function(list, folder_name, unified=TRUE) {
-    n <- length(list)
-
-    if (n < 2) {
-        warning("List must contain at least two elements.")
-        return(NULL)
-    }
-
-    if (is.null(names(list))) {
-        names(list) <- paste0("Group", seq_along(list))
-    }
-
-    num_pairs <- floor(n / 2)
-
-    if (unified) {
-        # dir.create(folder_name, showWarnings = FALSE)
-        # plot_file <- file.path(paste(folder_name, ".png"))
-        # png(plot_file, width = 200 * num_pairs, height = 600)
-        #
-        # par(mar = c(6, 4, 4, 2))  # more space at bottom for axis labels
-        all_data <- list()
-        group_labels <- c()
-        pair_labels <- c()
-        p_stars <- c()
-    }
-
-    for (i in seq(1, num_pairs * 2, by = 2)) {
-        group1 <- list[[i]]
-        group2 <- list[[i + 1]]
-        name <- sub("_case", "", names(list)[i]) # remove "_case" from the name for display
-
-        # do a t-test
-        if (length(group1) == 0 || length(group2) == 0) {
-            warning("Skipping pair ", name, " and ", names(list)[i + 1], ": one of the groups is empty.")
-            next
-        }
-        p_value <- t.test(group1, group2)$p.value
-        stars <- p_to_stars(p_value)
-
-        if (unified) {
-            # Store data and labels
-            all_data <- c(all_data, list(group1, group2))
-            group_labels <- c(group_labels, paste0("case_", name), paste0("control_", name))
-            pair_labels <- c(pair_labels, name)
-            p_stars <- c(p_stars, stars)
-        } else {
-            combined_data <- c(group1, group2)
-            group_labels <- c(rep("case", length(group1)), rep("control", length(group2)))
-
-            # File name
-            plot_file <- file.path(folder_name, paste0(name, ".png"))
-
-            png(plot_file, width = 300, height = 600)
-
-            boxplot(combined_data ~ group_labels,
-                    main = paste(sub("_case", "", name)),
-                    xlab = "",
-                    ylab = "Log2FC",
-                    col = c("lightblue", "lightgreen") #,
-                    # boxwex = 0.3)
-            )
-            # Add asterisks centered between the two boxes, above their max
-            y_max <- max(combined_data, na.rm = TRUE)
-
-            text(x = 1.5, y = y_max - 0.1, labels = stars, cex = 2)
-            dev.off()
-        }
-    }
-
-    if (unified) {
-        # Flatten and relabel
-        combined_values <- unlist(all_data)
-        group <- rep(c("case", "control"), num_pairs)
-        pair_ids <- rep(pair_labels, each = 2)
-        group_ids <- rep(group_labels, times = sapply(all_data, length))
-
-        df <- data.frame(
-            value = combined_values,
-            group = factor(rep(group, times = sapply(all_data, length))),
-            pair = factor(rep(pair_ids, times = sapply(all_data, length))),
-            group_id = group_ids
-        )
-
-        num_pairs <- length(pair_labels)
-        colour_df <- data.frame(
-            pair = pair_labels,
-            case_colour = base_colours,
-            control_colour = sapply(base_colours, lighten_colour)
-        )
-
-        df$fill <- mapply(function(p, g) {
-            row_index <- match(p, colour_df$pair)
-            if (g == "case") {
-                colour_df$case_colour[row_index]
-            } else {
-                colour_df$control_colour[row_index]
-            }
-        }, df$pair, df$group)
-
-        # Save plot
-        dir.create(folder_name, showWarnings = FALSE)
-        plot_file <- file.path(paste0(folder_name, ".png"))
-        ggsave(
-            filename = plot_file,
-            width = 2.5 * num_pairs, height = 6, units = "in", dpi = 300,
-            plot = ggplot(df, aes(x = group, y = value, fill = fill)) +
-                geom_boxplot(width = 0.6) +
-                scale_fill_identity() +
-                facet_wrap(~pair, scales = "free_x", nrow = 1) +
-                theme_minimal(base_size = 14) +
-                labs(y = "Log2FC", x = NULL, title = "All Pairs") +
-                theme(
-                    axis.text.x = element_text(angle = 0, vjust = 0.5),
-                    strip.text = element_text(face = "bold"),
-                    plot.title = element_text(hjust = 0.5)
-                )
-        )
-    }
-}
 
 #' Make and save boxplot figures from a list of arrays.
 #'
@@ -304,8 +185,6 @@ boxplots <- function(list, file_name, unified) {
         # Create the plot
         p <- ggplot2::ggplot(plot_data, ggplot2::aes(x = x_pos, y = value, group = x_pos)) +
             ggplot2::geom_boxplot(ggplot2::aes(fill = fill_id), width = box_width) +
-            # ggplot2::geom_jitter(width = box_width * 0.2, alpha = 0.5, size = 1.2) + # jitter clutters things a bit too much
-
             ggplot2::scale_fill_manual(values = all_colours) +
 
             ggplot2::geom_text(data = annot_data, ggplot2::aes(x = x, y = Inf, label = stars), vjust = 1.5, size = 8, inherit.aes = FALSE) +
