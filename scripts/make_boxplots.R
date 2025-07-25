@@ -288,7 +288,7 @@ make_all_boxplots <- function(unified = TRUE) {
 }
 
 # Run this to create all boxplots for the paper.
-make_all_boxplots(unified)
+make_all_boxplots()
 
 # For reproducibility:
 writeLines(capture.output(sessionInfo()), "session_info.txt")
