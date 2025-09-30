@@ -21,8 +21,8 @@ p_to_stars <- function(p) {
         return("**")
     } else if (p < 0.05) {
         return("*")
-    } else if (p < 0.1) {
-        return(".")
+    # } else if (p < 0.1) {
+    #     return(".") # not standard for a biology paper
     } else {
         return("")  # not significant
     }
@@ -288,7 +288,7 @@ make_all_boxplots <- function(unified = TRUE) {
 }
 
 # Run this to create all boxplots for the paper.
-make_all_boxplots(unified)
+make_all_boxplots(unified=TRUE)
 
 # For reproducibility:
 writeLines(capture.output(sessionInfo()), "session_info.txt")
