@@ -188,7 +188,7 @@ boxplots <- function(list, file_name, unified) {
             ggplot2::scale_fill_manual(values = all_colours) +
 
             ggplot2::geom_text(data = annot_data, ggplot2::aes(x = x, y = Inf, label = stars), vjust = 1.5, size = 8, inherit.aes = FALSE) +
-            ggplot2::geom_text(data = annot_data, ggplot2::aes(x = x, y = Inf, label = name, vjust = vjust_name), fontface = "bold", size = 6, inherit.aes = FALSE) +
+            ggplot2::geom_text(data = annot_data, ggplot2::aes(x = x, y = Inf, label = name, vjust = vjust_name), fontface = "italic", size = 6, inherit.aes = FALSE) +
 
             # Use the calculated positions for the x-axis ticks and labels
             ggplot2::scale_x_continuous(breaks = x_axis_breaks, labels = rep(c("case", "control"), num_pairs)) +

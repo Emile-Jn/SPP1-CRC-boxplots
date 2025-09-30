@@ -20,11 +20,11 @@ other attached packages:
 [1] jsonlite_1.8.8 ggplot2_3.5.1  pacman_0.5.1  
 
 loaded via a namespace (and not attached):
- [1] utf8_1.2.4       R6_2.5.1         tidyselect_1.2.1
- [4] farver_2.1.2     magrittr_2.0.3   gtable_0.3.5    
- [7] glue_1.7.0       tibble_3.2.1     pkgconfig_2.0.3 
-[10] generics_0.1.3   dplyr_1.1.4      lifecycle_1.0.4 
-[13] cli_3.6.3        fansi_1.0.6      scales_1.3.0    
-[16] grid_4.4.1       vctrs_0.6.5      withr_3.0.0     
-[19] compiler_4.4.1   munsell_0.5.1    pillar_1.9.0    
-[22] colorspace_2.1-0 rlang_1.1.4     
+ [1] utf8_1.2.4        R6_2.5.1          tidyselect_1.2.1 
+ [4] farver_2.1.2      magrittr_2.0.3    gtable_0.3.5     
+ [7] glue_1.7.0        tibble_3.2.1      pkgconfig_2.0.3  
+[10] generics_0.1.3    dplyr_1.1.4       lifecycle_1.0.4  
+[13] cli_3.6.3         fansi_1.0.6       scales_1.3.0     
+[16] grid_4.4.1        vctrs_0.6.5       withr_3.0.0      
+[19] data.table_1.15.4 compiler_4.4.1    pillar_1.9.0     
+[22] munsell_0.5.1     colorspace_2.1-0  rlang_1.1.4      
